@@ -6,10 +6,10 @@
 <title>Scout — Your Personal Shopping Agent</title>
 <meta name="description" content="Tell Scout what you need. We'll find it, compare it, and bring it to you. Free to ask, pay only after delivery." />
 
-<link rel="manifest" href="manifest.json" />
+<link rel="manifest" href="/manifest.json" />
 <meta name="theme-color" content="#1F4D3E" />
-<link rel="apple-touch-icon" href="icons/icon-192.png" />
-<link rel="icon" href="icons/favicon-64.png" />
+<link rel="apple-touch-icon" href="/icons/icon-192.png" />
+<link rel="icon" href="/icons/favicon-64.png" />
 <meta name="apple-mobile-web-app-capable" content="yes" />
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 
@@ -17,73 +17,12 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..700;1,9..144,400..700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
 
-<script src="https://cdn.tailwindcss.com"></script>
-
-<style>
-  html, body { margin: 0; padding: 0; background: #EDF3EE; }
-  .font-display { font-family: 'Fraunces', serif; }
-  .font-body { font-family: 'Plus Jakarta Sans', sans-serif; }
-  .font-mono { font-family: 'JetBrains Mono', monospace; }
-
-  input, textarea, button { font-family: inherit; }
-  input:focus, textarea:focus { outline: none; border-color: #1F4D3E; }
-  input::placeholder, textarea::placeholder { color: #9AA6A0; }
-
-  @keyframes pulseRing {
-    0% { box-shadow: 0 0 0 0 rgba(31,77,62,0.35); }
-    70% { box-shadow: 0 0 0 9px rgba(31,77,62,0); }
-    100% { box-shadow: 0 0 0 0 rgba(31,77,62,0); }
-  }
-  .scout-pulse { animation: pulseRing 2.4s infinite; }
-
-  @keyframes stepIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-  .step-anim { animation: stepIn 0.35s ease both; }
-
-  @keyframes heroIn {
-    from { opacity: 0; transform: translateY(16px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-  .hero-anim { animation: heroIn 0.5s ease both; }
-
-  @keyframes tearIn {
-    from { opacity: 0; transform: translateY(20px) scale(0.98); }
-    to { opacity: 1; transform: translateY(0) scale(1); }
-  }
-  .tear-anim { animation: tearIn 0.45s cubic-bezier(0.16,1,0.3,1) both; }
-
-  .receipt-edge {
-    background-image:
-      linear-gradient(135deg, transparent 60%, #EDF3EE 60%),
-      linear-gradient(-135deg, transparent 60%, #EDF3EE 60%);
-    background-size: 14px 14px;
-    background-position: bottom left, bottom right;
-    background-repeat: repeat-x;
-  }
-
-  .spinner {
-    width: 16px; height: 16px;
-    border: 2px solid rgba(22,36,31,0.25);
-    border-top-color: #16241F;
-    border-radius: 50%;
-    animation: spin 0.7s linear infinite;
-  }
-  .spinner-lg { width: 28px; height: 28px; border-width: 3px; border-color: rgba(107,122,115,0.25); border-top-color: #6B7A73; }
-  @keyframes spin { to { transform: rotate(360deg); } }
-
-  @media (prefers-reduced-motion: reduce) {
-    .scout-pulse, .step-anim, .hero-anim, .tear-anim, .spinner { animation: none !important; }
-  }
-</style>
+<!-- Runtime config: edit this file directly on the server to change the
+     Apps Script URL or WhatsApp link without needing a rebuild. -->
+<script src="/config.js"></script>
 </head>
 <body>
-  <div class="w-full min-h-screen flex items-center justify-center py-6 px-3">
-    <div id="phone-frame" class="w-full max-w-[430px] h-[860px] max-h-[92vh] bg-[#FBFCFA] rounded-[32px] shadow-[0_24px_60px_-15px_rgba(22,36,31,0.25)] border border-[#16241F]/5 overflow-hidden relative"></div>
-  </div>
-
-  <script src="config.js"></script>
-  <script src="app.js"></script>
+  <div id="root"></div>
+  <script type="module" src="/src/main.jsx"></script>
 </body>
 </html>
