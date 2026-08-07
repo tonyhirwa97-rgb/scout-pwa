@@ -13,7 +13,7 @@ const item = {
   show: { opacity: 1, y: 0, transition: { duration: 0.4, ease: "easeOut" } },
 };
 
-export default function Landing({ onStart, onInsights }) {
+export default function Landing({ onStart, onInsights, onCreateCircle }) {
   return (
     <div className="h-full flex flex-col px-6 pt-6 pb-7 relative overflow-hidden">
       <motion.div
@@ -72,6 +72,12 @@ export default function Landing({ onStart, onInsights }) {
       <motion.div variants={item} initial="hidden" animate="show" className="relative z-10 pt-5">
         <PrimaryButton onClick={onStart}>Find What I Need</PrimaryButton>
         <p className="font-body text-[11px] text-center text-sage/80 mt-3">No login. No forms yet. Just one tap.</p>
+        <button
+          onClick={onCreateCircle}
+          className="w-full text-center font-body text-[12px] text-forest/80 mt-4 underline underline-offset-2"
+        >
+          Shopping with a group? Create a Scout Circle instead
+        </button>
       </motion.div>
     </div>
   );

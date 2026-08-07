@@ -26,6 +26,30 @@ export function fetchStats() {
   return fetch(`${SCRIPT_URL}?action=stats`).then((r) => r.json());
 }
 
+export function createCircle({ name, creatorName, creatorPhone }) {
+  const { SCRIPT_URL } = getConfig();
+  if (!isConfigured(SCRIPT_URL)) return Promise.reject(new Error("not configured"));
+  const params = new URLSearchParams({
+    action: "create_circle",
+    name: name || "",
+    creatorName: creatorName || "",
+    creatorPhone: creatorPhone || "",
+  });
+  return fetch(`${SCRIPT_URL}?${params.toString()}`).then((r) => r.json());
+}
+
+export function fetchCircle(code) {
+  const { SCRIPT_URL } = getConfig();
+  if (!isConfigured(SCRIPT_URL)) return Promise.reject(new Error("not configured"));
+  const params = new URLSearchParams({ action: "circle", code: code || "" });
+  return fetch(`${SCRIPT_URL}?${params.toString()}`).then((r) => r.json());
+}
+
+export function circleShareUrl(code) {
+  const base = `${window.location.origin}${window.location.pathname}`;
+  return `${base}?circle=${code}`;
+}
+
 export function getWhatsAppLink() {
   const { WHATSAPP_GROUP_LINK } = getConfig();
   return WHATSAPP_GROUP_LINK || "#";

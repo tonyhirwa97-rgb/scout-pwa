@@ -1,8 +1,9 @@
+import { useState } from "react";
 import { motion } from "framer-motion";
-import { MessageCircle } from "lucide-react";
+import { MessageCircle, Sparkles, Copy, Check as CheckIcon } from "lucide-react";
 import ScoutBadge from "../ScoutBadge";
 import { CATEGORIES } from "../../lib/constants";
-import { getWhatsAppLink } from "../../lib/backend";
+import { getWhatsAppLink, circleShareUrl } from "../../lib/backend";
 
 function ReceiptRow({ label, value }) {
   return (
@@ -13,9 +14,18 @@ function ReceiptRow({ label, value }) {
   );
 }
 
-export default function Complete({ form, saveError, onRestart }) {
+export default function Complete({ form, saveError, circleCode, circleName, onRestart, onBuildCircle }) {
   const catLabels = CATEGORIES.filter((c) => form.categories.includes(c.id)).map((c) => c.label).join(", ");
   const whatsappLink = getWhatsAppLink();
+  const [copied, setCopied] = useState(false);
+
+  const copyCircleLink = () => {
+    if (!circleCode) return;
+    navigator.clipboard?.writeText(circleShareUrl(circleCode)).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    });
+  };
 
   return (
     <div className="h-full flex flex-col px-6 py-8 overflow-y-auto">
@@ -55,6 +65,48 @@ export default function Complete({ form, saveError, onRestart }) {
           <p className="font-body text-[11.5px] text-plum mt-4 text-center">
             We couldn't sync this one to our servers just now, but your request has been noted.
           </p>
+        )}
+
+        {circleCode ? (
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
+            className="mt-5 rounded-2xl bg-forest px-4 py-3.5"
+          >
+            <div className="flex items-center gap-1.5 mb-1.5">
+              <Sparkles className="w-3.5 h-3.5 text-marigold" />
+              <p className="font-body text-[12.5px] font-semibold text-cream">
+                You're shopping with {circleName || "your Circle"}
+              </p>
+            </div>
+            <p className="font-body text-[12px] text-cream/75 mb-3 leading-snug">
+              Bring more people in — everyone's requests land in the same Circle.
+            </p>
+            <button
+              onClick={copyCircleLink}
+              className="w-full flex items-center justify-center gap-2 rounded-xl bg-cream/10 py-2.5 text-cream font-body text-[12.5px] font-medium"
+            >
+              {copied ? <CheckIcon className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
+              {copied ? "Link copied" : "Copy invite link"}
+            </button>
+          </motion.div>
+        ) : (
+          <motion.button
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
+            onClick={onBuildCircle}
+            className="mt-5 w-full text-left rounded-2xl border border-forest/20 bg-forest/[0.05] px-4 py-3.5"
+          >
+            <div className="flex items-center gap-1.5 mb-1">
+              <Sparkles className="w-3.5 h-3.5 text-forest" />
+              <p className="font-body text-[12.5px] font-semibold text-forest">Build your Scout Circle</p>
+            </div>
+            <p className="font-body text-[12px] text-sage leading-snug">
+              Your Circle helps decide what Scout sources first — founding circles get early access.
+            </p>
+          </motion.button>
         )}
       </motion.div>
 
