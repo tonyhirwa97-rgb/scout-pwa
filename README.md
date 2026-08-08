@@ -1,70 +1,88 @@
 # Scout
 
-Your personal shopping agent — a PWA that lets people ask for what they
-need, tells them Scout will find it, and only asks for payment after
-delivery.
+Your personal shopping agent — a PWA that lets people (and groups, via
+Scout Circles) ask for what they need, and only pay after delivery.
 
 ## Stack
 
-- **Frontend**: React + Vite + Tailwind CSS, animated with Framer Motion,
-  icons via lucide-react, charts via Recharts
-- **Backend**: Google Apps Script Web App → Google Sheet
-  (`apps-script/Code.gs`)
-- **Hosting**: Netlify, connected to this GitHub repo — every push to
-  `main` triggers an automatic build and deploy
-- **Notifications**: email alert on every completed request, sent from
-  the Google account that owns the Apps Script deployment
+- **Frontend**: React + Vite + Tailwind CSS, Framer Motion, lucide-react, Recharts
+- **Backend**: a Netlify Function (`netlify/functions/scout.js`) talking
+  directly to the Google Sheets API — no more Apps Script
+- **Data store**: a Google Sheet, exactly as before (Visits, Interested,
+  Submissions, Circles tabs)
+- **Hosting**: Netlify, connected to this GitHub repo. Every push to
+  `main` deploys the frontend *and* the backend function automatically.
 
-## How updates work now
+## Why this changed from Apps Script
 
-You don't need to do anything to deploy a change. Whoever is editing
-the code (including Claude, working from this same repo) pushes to
-`main`, and Netlify automatically:
+The old backend lived in Google Apps Script, which isn't part of any
+git repository — every backend change meant manually pasting code into
+a browser editor and redeploying by hand. Now the backend is just
+another file in this repo. Push once, both sides update.
 
-1. Runs `npm install`
-2. Runs `npm run build`
-3. Publishes the `dist/` folder to your live site
+## One-time setup this version needs
 
-No zip files, no manual uploads.
+The Google Sheets API requires a **service account** — a machine
+identity Google issues so code (rather than a person) can read and
+write to a specific Sheet. This is a one-time setup:
 
-## The one file you might still want to edit yourself
+1. Go to [console.cloud.google.com](https://console.cloud.google.com)
+   and create a new project (or reuse one).
+2. **APIs & Services → Library** → search "Google Sheets API" → **Enable**.
+3. **APIs & Services → Credentials → Create Credentials → Service account**.
+   Give it any name (e.g. "scout-backend").
+4. Open the service account you just created → **Keys** tab → **Add key
+   → Create new key → JSON**. This downloads a `.json` file — keep it
+   private, never commit it to GitHub.
+5. Inside that JSON file, find `client_email` and `private_key`.
+6. Open your **Scout Data** Google Sheet → **Share** → paste in the
+   `client_email` value (looks like
+   `something@project-id.iam.gserviceaccount.com`) → give it **Editor**
+   access → Share. This is what actually grants the function access.
+7. Copy your Sheet's ID from its URL:
+   `docs.google.com/spreadsheets/d/`**`THIS_PART`**`/edit`
 
-`public/config.js` holds two values that don't require touching any
-code:
+### Setting the environment variables in Netlify
 
-```js
-window.SCOUT_CONFIG = {
-  SCRIPT_URL: "...",           // your Apps Script Web App URL
-  WHATSAPP_GROUP_LINK: "...",  // your WhatsApp group invite link
-};
-```
+Netlify → your site → **Site configuration → Environment variables → Add a variable**, three times:
 
-Changing either of these still requires a redeploy to take effect —
-same as any other code change: push to `main` and Netlify rebuilds
-automatically.
+| Key | Value |
+|---|---|
+| `GOOGLE_SERVICE_ACCOUNT_EMAIL` | the `client_email` from the JSON file |
+| `GOOGLE_PRIVATE_KEY` | the `private_key` from the JSON file (paste it exactly as-is, including `-----BEGIN PRIVATE KEY-----` and the `\n` characters) |
+| `GOOGLE_SHEET_ID` | the Sheet ID from step 7 |
 
-## Local development (optional — not required for deployment)
+After adding these, trigger one deploy (Netlify → Deploys → **Trigger
+deploy → Deploy site**) so the function picks them up.
+
+## Optional: email notifications
+
+The old Apps Script version emailed you on every completed request
+using Gmail directly. Netlify Functions don't have a built-in mail
+sender, so this version supports an optional free provider instead
+([Resend](https://resend.com), no card required for low volume):
+
+1. Sign up at resend.com, verify your email, grab an API key.
+2. Add two more environment variables in Netlify:
+   - `RESEND_API_KEY`
+   - `NOTIFY_EMAIL` (your own email address)
+
+If these aren't set, the app still works fine — it just won't send
+email alerts.
+
+## The one file you edit directly
+
+`public/config.js` — just your WhatsApp group link. Change it, push,
+done.
+
+## Local development (optional)
 
 ```
 npm install
 npm run dev
 ```
 
-This is only useful if you're working from a computer. On mobile,
-changes are made by editing files directly and pushing — Netlify does
-the building for you.
-
-## Backend setup
-
-See `apps-script/Code.gs` for the full backend. If you ever need to
-redeploy it fresh:
-
-1. Create a Google Sheet
-2. Extensions → Apps Script
-3. Paste in `Code.gs`
-4. Deploy → New deployment → Web app
-   - Execute as: Me
-   - Who has access: Anyone
-5. Copy the Web App URL into `public/config.js` as `SCRIPT_URL`
-
-Data lands in three tabs: Visits, Interested, Submissions.
+Note: `npm run dev` won't run the backend function locally without the
+[Netlify CLI](https://docs.netlify.com/cli/get-started/) (`netlify dev`
+instead of `vite` directly). Not required — pushing to `main` and
+testing on the live site works fine without it.

@@ -72,10 +72,14 @@ export default function App() {
   const submit = () => {
     if (!form.name.trim() || !form.phone.trim()) return;
     setSaving(true);
-    post("submission", { ...form, circleCode: circleCode || "" }, sessionId.current).finally(() => {
-      setSaving(false);
-      setScreen("complete");
-    });
+    post("submission", { ...form, circleCode: circleCode || "" }, sessionId.current)
+      .then((res) => {
+        setSaveError(!res || !res.ok);
+      })
+      .finally(() => {
+        setSaving(false);
+        setScreen("complete");
+      });
   };
 
   const restart = () => {
