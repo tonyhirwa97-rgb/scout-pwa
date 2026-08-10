@@ -40,10 +40,24 @@ function json(statusCode, body) {
 
 let cachedSheets = null;
 
+function getPrivateKey() {
+  let key = process.env.GOOGLE_PRIVATE_KEY || "";
+  key = key.trim();
+  // Defensive cleanup: people copy-pasting from a JSON viewer on mobile
+  // sometimes grab the surrounding quotes by accident, or line breaks
+  // get mangled. Strip wrapping quotes if present, then normalize
+  // escaped newlines to real ones.
+  if ((key.startsWith('"') && key.endsWith('"')) || (key.startsWith("'") && key.endsWith("'"))) {
+    key = key.slice(1, -1);
+  }
+  key = key.replace(/\\r\\n/g, "\n").replace(/\\n/g, "\n").replace(/\r\n/g, "\n");
+  return key.trim();
+}
+
 async function getSheets() {
   if (cachedSheets) return cachedSheets;
-  const email = process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL;
-  const key = (process.env.GOOGLE_PRIVATE_KEY || "").replace(/\\n/g, "\n");
+  const email = (process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL || "").trim();
+  const key = getPrivateKey();
   const auth = new google.auth.JWT(email, null, key, ["https://www.googleapis.com/auth/spreadsheets"]);
   await auth.authorize();
   cachedSheets = google.sheets({ version: "v4", auth });
