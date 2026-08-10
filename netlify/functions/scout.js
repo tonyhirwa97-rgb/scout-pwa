@@ -83,7 +83,14 @@ async function getSheets() {
   return cachedSheets;
 }
 
-const SHEET_ID = () => process.env.GOOGLE_SHEET_ID;
+function getSheetId() {
+  const raw = (process.env.GOOGLE_SHEET_ID || "").trim();
+  // Accept either the bare ID or a full Sheets URL pasted by mistake.
+  const match = raw.match(/\/d\/([a-zA-Z0-9-_]+)/);
+  return match ? match[1] : raw;
+}
+
+const SHEET_ID = () => getSheetId();
 
 function colLetter(n) {
   let s = "";
@@ -124,15 +131,11 @@ async function appendRow(sheets, tabName, row) {
 }
 
 async function readRows(sheets, tabName, numCols) {
-  try {
-    const res = await sheets.spreadsheets.values.get({
-      spreadsheetId: SHEET_ID(),
-      range: `${tabName}!A2:${colLetter(numCols)}`,
-    });
-    return res.data.values || [];
-  } catch {
-    return [];
-  }
+  const res = await sheets.spreadsheets.values.get({
+    spreadsheetId: SHEET_ID(),
+    range: `${tabName}!A2:${colLetter(numCols)}`,
+  });
+  return res.data.values || [];
 }
 
 // ---------------------------------------------------------------
