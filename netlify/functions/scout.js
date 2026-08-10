@@ -39,25 +39,44 @@ function json(statusCode, body) {
 }
 
 let cachedSheets = null;
+let cachedCreds = null;
 
-function getPrivateKey() {
-  let key = process.env.GOOGLE_PRIVATE_KEY || "";
-  key = key.trim();
-  // Defensive cleanup: people copy-pasting from a JSON viewer on mobile
-  // sometimes grab the surrounding quotes by accident, or line breaks
-  // get mangled. Strip wrapping quotes if present, then normalize
-  // escaped newlines to real ones.
+function getCredentials() {
+  if (cachedCreds) return cachedCreds;
+
+  const rawKeyVar = (process.env.GOOGLE_PRIVATE_KEY || "").trim();
+  const emailVar = (process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL || "").trim();
+
+  // Accept EITHER the full downloaded service-account JSON file pasted
+  // whole into GOOGLE_PRIVATE_KEY, OR just the raw private_key string.
+  // Pasting the whole file removes any need for precise mobile text
+  // selection - copy the entire file, paste it, done.
+  if (rawKeyVar.startsWith("{")) {
+    try {
+      const parsed = JSON.parse(rawKeyVar);
+      cachedCreds = {
+        email: parsed.client_email || emailVar,
+        key: (parsed.private_key || "").trim(),
+      };
+      return cachedCreds;
+    } catch {
+      // fall through to raw-key handling below if JSON parsing fails
+    }
+  }
+
+  let key = rawKeyVar;
   if ((key.startsWith('"') && key.endsWith('"')) || (key.startsWith("'") && key.endsWith("'"))) {
     key = key.slice(1, -1);
   }
-  key = key.replace(/\\r\\n/g, "\n").replace(/\\n/g, "\n").replace(/\r\n/g, "\n");
-  return key.trim();
+  key = key.replace(/\\r\\n/g, "\n").replace(/\\n/g, "\n").replace(/\r\n/g, "\n").trim();
+
+  cachedCreds = { email: emailVar, key };
+  return cachedCreds;
 }
 
 async function getSheets() {
   if (cachedSheets) return cachedSheets;
-  const email = (process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL || "").trim();
-  const key = getPrivateKey();
+  const { email, key } = getCredentials();
   const auth = new google.auth.JWT(email, null, key, ["https://www.googleapis.com/auth/spreadsheets"]);
   await auth.authorize();
   cachedSheets = google.sheets({ version: "v4", auth });
