@@ -1,15 +1,25 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Sparkles, Copy, Check as CheckIcon, MessageCircle } from "lucide-react";
 import ScoutBadge from "../ScoutBadge";
+import ConfettiBurst from "../ConfettiBurst";
 import CircleSummary from "../CircleSummary";
 import { circleShareUrl } from "../../lib/backend";
+import { playSuccess, playTap } from "../../lib/sound";
 
 export default function CircleCreated({ circle, onContinue }) {
   const [copied, setCopied] = useState(false);
+  const [showConfetti, setShowConfetti] = useState(true);
   const link = circleShareUrl(circle.code);
 
+  useEffect(() => {
+    playSuccess();
+    const t = setTimeout(() => setShowConfetti(false), 1400);
+    return () => clearTimeout(t);
+  }, []);
+
   const copyLink = () => {
+    playTap();
     navigator.clipboard?.writeText(link).then(() => {
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
@@ -21,7 +31,8 @@ export default function CircleCreated({ circle, onContinue }) {
   );
 
   return (
-    <div className="h-full flex flex-col px-6 py-8 overflow-y-auto">
+    <div className="h-full flex flex-col px-6 py-8 overflow-y-auto relative">
+      {showConfetti && <ConfettiBurst />}
       <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }}>
         <div className="flex items-center gap-2 mb-6">
           <ScoutBadge pulse={false} ping />
@@ -68,7 +79,10 @@ export default function CircleCreated({ circle, onContinue }) {
 
       <div className="mt-auto pt-6">
         <button
-          onClick={onContinue}
+          onClick={() => {
+            playTap();
+            onContinue();
+          }}
           className="w-full font-body font-semibold text-[14px] rounded-2xl py-3.5 border border-border text-ink"
         >
           Continue to my own request

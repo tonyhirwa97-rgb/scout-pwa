@@ -4,6 +4,7 @@ import PrimaryButton from "../PrimaryButton";
 import Question from "../Question";
 import ScoutBadge from "../ScoutBadge";
 import { createCircle } from "../../lib/backend";
+import { playSelect, playBack } from "../../lib/sound";
 
 const SUGGESTIONS = ["Family", "Roommates", "Classmates", "Workmates"];
 
@@ -46,7 +47,10 @@ export default function CreateCircle({ onBack, onCreated }) {
         {SUGGESTIONS.map((s) => (
           <button
             key={s}
-            onClick={() => setName(s)}
+            onClick={() => {
+              playSelect();
+              setName(s);
+            }}
             className={`font-body text-[12.5px] px-3 py-1.5 rounded-full border transition-colors ${
               name === s ? "bg-forest border-forest text-cream" : "bg-white border-border text-ink"
             }`}
@@ -97,7 +101,13 @@ export default function CreateCircle({ onBack, onCreated }) {
         <PrimaryButton disabled={!canSubmit} onClick={handleCreate} spinning={saving}>
           {saving ? "Creating…" : "Create My Circle"}
         </PrimaryButton>
-        <button onClick={onBack} className="font-body text-[13.5px] text-sage flex items-center justify-center gap-1.5 py-2">
+        <button
+          onClick={() => {
+            playBack();
+            onBack();
+          }}
+          className="font-body text-[13.5px] text-sage flex items-center justify-center gap-1.5 py-2"
+        >
           <ArrowLeft className="w-3.5 h-3.5" />
           Back
         </button>

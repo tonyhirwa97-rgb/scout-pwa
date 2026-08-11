@@ -1,9 +1,11 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { MessageCircle, Sparkles, Copy, Check as CheckIcon } from "lucide-react";
 import ScoutBadge from "../ScoutBadge";
+import ConfettiBurst from "../ConfettiBurst";
 import { CATEGORIES } from "../../lib/constants";
 import { getWhatsAppLink, circleShareUrl } from "../../lib/backend";
+import { playSuccess } from "../../lib/sound";
 
 function ReceiptRow({ label, value }) {
   return (
@@ -18,6 +20,13 @@ export default function Complete({ form, saveError, circleCode, circleName, onRe
   const catLabels = CATEGORIES.filter((c) => form.categories.includes(c.id)).map((c) => c.label).join(", ");
   const whatsappLink = getWhatsAppLink();
   const [copied, setCopied] = useState(false);
+  const [showConfetti, setShowConfetti] = useState(true);
+
+  useEffect(() => {
+    if (!saveError) playSuccess();
+    const t = setTimeout(() => setShowConfetti(false), 1400);
+    return () => clearTimeout(t);
+  }, [saveError]);
 
   const copyCircleLink = () => {
     if (!circleCode) return;
@@ -28,7 +37,8 @@ export default function Complete({ form, saveError, circleCode, circleName, onRe
   };
 
   return (
-    <div className="h-full flex flex-col px-6 py-8 overflow-y-auto">
+    <div className="h-full flex flex-col px-6 py-8 overflow-y-auto relative">
+      {showConfetti && !saveError && <ConfettiBurst />}
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.45 }}>
         <div className="flex items-center gap-2 mb-6">
           <ScoutBadge pulse={false} ping />

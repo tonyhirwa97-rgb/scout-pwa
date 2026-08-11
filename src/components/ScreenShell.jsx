@@ -2,8 +2,14 @@ import { motion } from "framer-motion";
 import { ArrowLeft } from "lucide-react";
 import ScoutBadge from "./ScoutBadge";
 import ProgressBar from "./ProgressBar";
+import { playBack } from "../lib/sound";
 
 export default function ScreenShell({ step, onBack, children, footer }) {
+  const handleBack = () => {
+    playBack();
+    onBack?.();
+  };
+
   return (
     <div className="flex flex-col h-full">
       <div className="px-5 pt-5 pb-3 shrink-0">
@@ -27,7 +33,7 @@ export default function ScreenShell({ step, onBack, children, footer }) {
 
       {onBack && (
         <div className="px-5 pt-1 pb-2 shrink-0">
-          <button onClick={onBack} className="font-body text-[13.5px] text-sage flex items-center gap-1.5 py-2">
+          <button onClick={handleBack} className="font-body text-[13.5px] text-sage flex items-center gap-1.5 py-2">
             <ArrowLeft className="w-3.5 h-3.5" />
             Back
           </button>

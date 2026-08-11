@@ -4,8 +4,14 @@ import Question from "../Question";
 import PrimaryButton from "../PrimaryButton";
 import TrustNote from "../TrustNote";
 import { BUDGETS } from "../../lib/constants";
+import { playSelect } from "../../lib/sound";
 
 export default function StepBudget({ form, setForm, onNext, onBack }) {
+  const select = (b) => {
+    playSelect();
+    setForm((f) => ({ ...f, budget: b }));
+  };
+
   return (
     <ScreenShell
       step={2}
@@ -23,7 +29,7 @@ export default function StepBudget({ form, setForm, onNext, onBack }) {
           return (
             <motion.button
               key={b}
-              onClick={() => setForm((f) => ({ ...f, budget: b }))}
+              onClick={() => select(b)}
               whileTap={{ scale: 0.97 }}
               className={`font-body text-[13.5px] px-3.5 py-2.5 rounded-xl border text-left transition-colors duration-150 ${
                 selected ? "bg-forest border-forest text-cream" : "bg-white border-border text-ink"
