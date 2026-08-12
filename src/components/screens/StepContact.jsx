@@ -32,7 +32,7 @@ export default function StepContact({ form, setForm, onSubmit, onBack, saving })
         </PrimaryButton>
       }
     >
-      <Question eyebrow="Last step" title="Where should Scout send this?" sub="So we can reach you the moment it's found." />
+      <Question eyebrow="Last step" title="How can we reach you?" sub="So we can follow up as Scout gets ready to help." />
       <div className="flex flex-col gap-3 mb-4">
         <Field
           icon={User}

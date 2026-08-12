@@ -38,7 +38,7 @@ export default function CircleLanding({ circle, onJoin }) {
         </motion.h1>
 
         <motion.p variants={item} className="font-body text-[13.5px] leading-relaxed text-sage mb-5 max-w-[300px]">
-          Most of us already shop with the people around us. Scout just makes it easier — everyone requests what they need, and we search, compare, and deliver it all.
+          Most of us already shop with the people around us. Scout is being built to make that easier — share what your circle would like, and you'll be among the first to know once we're ready to start finding and delivering it.
         </motion.p>
 
         <motion.div variants={item} className="flex flex-col gap-2 mb-5">

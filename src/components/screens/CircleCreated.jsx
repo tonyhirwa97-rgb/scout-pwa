@@ -27,7 +27,7 @@ export default function CircleCreated({ circle, onContinue }) {
   };
 
   const whatsappShareText = encodeURIComponent(
-    `I've started a Scout Circle called "${circle.name}" — tell Scout what you need and it'll find it, compare it, and bring it to you. Free to ask, pay only after delivery.\n\nJoin here: ${link}`
+    `I've started a Scout Circle called "${circle.name}" — tell Scout what you'd like, and you'll be among the first to know once we're ready to start finding and delivering it. Free to join, pay only after delivery.\n\nJoin here: ${link}`
   );
 
   return (

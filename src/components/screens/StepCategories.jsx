@@ -26,8 +26,8 @@ export default function StepCategories({ form, setForm, onNext }) {
     >
       <Question
         eyebrow="Step 1"
-        title="What are you shopping for?"
-        sub="Pick as many as apply — this helps Scout know where to start looking."
+        title="What would you like to be shopping for?"
+        sub="Pick as many as apply — this helps us understand what to focus on as we get Scout ready."
       />
       <div className="grid grid-cols-2 gap-2.5 mb-4">
         {CATEGORIES.map((c) => {

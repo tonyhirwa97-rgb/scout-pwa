@@ -45,10 +45,10 @@ export default function Complete({ form, saveError, circleCode, circleName, onRe
           <span className="font-display italic text-[15px] text-forest">Scout</span>
         </div>
 
-        <p className="font-mono text-[11px] tracking-wider text-marigold uppercase mb-2">Request logged</p>
-        <h2 className="font-display text-[26px] leading-tight text-ink mb-2">Scout is on the hunt.</h2>
+        <p className="font-mono text-[11px] tracking-wider text-marigold uppercase mb-2">Interest logged</p>
+        <h2 className="font-display text-[26px] leading-tight text-ink mb-2">You're on the list.</h2>
         <p className="font-body text-[13.5px] text-sage mb-6 leading-snug">
-          You're among the first people helping us build a smarter way to shop. We'll reach out the moment we find a match.
+          You're among the first people helping us build a smarter way to shop. We'll follow up as soon as Scout is ready to start finding things for people.
         </p>
 
         <motion.div
@@ -57,7 +57,7 @@ export default function Complete({ form, saveError, circleCode, circleName, onRe
           transition={{ delay: 0.15, duration: 0.4 }}
           className="bg-white rounded-t-2xl border border-border px-5 pt-5 pb-6 relative"
         >
-          <p className="font-mono text-[10px] tracking-widest text-sage/70 uppercase mb-3">Search ticket</p>
+          <p className="font-mono text-[10px] tracking-widest text-sage/70 uppercase mb-3">Interest ticket</p>
           <div className="flex flex-col gap-2.5 mb-4">
             <ReceiptRow label="Looking for" value={catLabels} />
             {form.want && <ReceiptRow label="Details" value={form.want} />}
@@ -86,7 +86,7 @@ export default function Complete({ form, saveError, circleCode, circleName, onRe
             <div className="flex items-center gap-1.5 mb-1.5">
               <Sparkles className="w-3.5 h-3.5 text-marigold" />
               <p className="font-body text-[12.5px] font-semibold text-cream">
-                You're shopping with {circleName || "your Circle"}
+                You're part of {circleName || "your Circle"}
               </p>
             </div>
             <p className="font-body text-[12px] text-cream/75 mb-3 leading-snug">
