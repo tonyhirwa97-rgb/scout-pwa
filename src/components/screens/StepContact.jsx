@@ -24,7 +24,7 @@ export default function StepContact({ form, setForm, onSubmit, onBack, saving })
 
   return (
     <ScreenShell
-      step={3}
+      step={2}
       onBack={onBack}
       footer={
         <PrimaryButton disabled={!canSubmit} onClick={onSubmit} icon={Send} spinning={saving}>

@@ -61,7 +61,6 @@ export default function Complete({ form, saveError, circleCode, circleName, onRe
           <div className="flex flex-col gap-2.5 mb-4">
             <ReceiptRow label="Looking for" value={catLabels} />
             {form.want && <ReceiptRow label="Details" value={form.want} />}
-            <ReceiptRow label="Budget" value={form.budget} />
             <ReceiptRow label="For" value={form.name} />
           </div>
           <div className="border-t border-dashed border-border pt-3 flex items-center justify-between">

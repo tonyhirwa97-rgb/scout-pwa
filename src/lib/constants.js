@@ -22,21 +22,11 @@ export const CATEGORIES = [
   { id: "other", label: "Other", icon: MoreHorizontal },
 ];
 
-export const BUDGETS = [
-  "Under K200",
-  "K200 – K500",
-  "K500 – K1,500",
-  "K1,500 – K5,000",
-  "K5,000+",
-  "Not sure yet",
-];
-
-export const TOTAL_STEPS = 3;
+export const TOTAL_STEPS = 2;
 
 export const emptyForm = {
   categories: [],
   want: "",
-  budget: "",
   name: "",
   phone: "",
   area: "",

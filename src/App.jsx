@@ -4,7 +4,6 @@ import { emptyForm } from "./lib/constants";
 import { post, fetchCircle } from "./lib/backend";
 import Landing from "./components/screens/Landing";
 import StepCategories from "./components/screens/StepCategories";
-import StepBudget from "./components/screens/StepBudget";
 import StepContact from "./components/screens/StepContact";
 import Complete from "./components/screens/Complete";
 import CircleLanding from "./components/screens/CircleLanding";
@@ -148,21 +147,12 @@ export default function App() {
             <StepCategories key="q1" form={form} setForm={setForm} onNext={() => setScreen("q2")} />
           )}
           {screen === "q2" && (
-            <StepBudget
+            <StepContact
               key="q2"
               form={form}
               setForm={setForm}
-              onNext={() => setScreen("q3")}
-              onBack={() => setScreen("q1")}
-            />
-          )}
-          {screen === "q3" && (
-            <StepContact
-              key="q3"
-              form={form}
-              setForm={setForm}
               onSubmit={submit}
-              onBack={() => setScreen("q2")}
+              onBack={() => setScreen("q1")}
               saving={saving}
             />
           )}
