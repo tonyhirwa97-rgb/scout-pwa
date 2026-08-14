@@ -9,6 +9,7 @@ import Complete from "./components/screens/Complete";
 import CircleLanding from "./components/screens/CircleLanding";
 import CreateCircle from "./components/screens/CreateCircle";
 import CircleCreated from "./components/screens/CircleCreated";
+import Vision from "./components/screens/Vision";
 
 const Insights = lazy(() => import("./components/screens/Insights"));
 
@@ -34,6 +35,7 @@ export default function App() {
   const [circleInfo, setCircleInfo] = useState(null); // for CircleLanding (joining)
   const [createdCircle, setCreatedCircle] = useState(null); // for CircleCreated (creator)
   const [circleEntryPoint, setCircleEntryPoint] = useState("landing"); // 'landing' | 'complete'
+  const [visionEntryPoint, setVisionEntryPoint] = useState("landing"); // 'landing' | 'complete'
 
   const sessionId = useRef(makeSessionId());
   const loggedVisit = useRef(false);
@@ -117,7 +119,15 @@ export default function App() {
                 setCircleEntryPoint("landing");
                 setScreen("create-circle");
               }}
+              onVision={() => {
+                setVisionEntryPoint("landing");
+                setScreen("vision");
+              }}
             />
+          )}
+
+          {screen === "vision" && (
+            <Vision key="vision" onBack={() => setScreen(visionEntryPoint === "complete" ? "complete" : "landing")} />
           )}
 
           {screen === "circle-landing" && circleInfo && (
@@ -167,6 +177,10 @@ export default function App() {
               onBuildCircle={() => {
                 setCircleEntryPoint("complete");
                 setScreen("create-circle");
+              }}
+              onVision={() => {
+                setVisionEntryPoint("complete");
+                setScreen("vision");
               }}
             />
           )}

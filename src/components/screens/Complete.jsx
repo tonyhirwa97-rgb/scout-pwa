@@ -16,7 +16,7 @@ function ReceiptRow({ label, value }) {
   );
 }
 
-export default function Complete({ form, saveError, circleCode, circleName, onRestart, onBuildCircle }) {
+export default function Complete({ form, saveError, circleCode, circleName, onRestart, onBuildCircle, onVision }) {
   const catLabels = CATEGORIES.filter((c) => form.categories.includes(c.id)).map((c) => c.label).join(", ");
   const whatsappLink = getWhatsAppLink();
   const [copied, setCopied] = useState(false);
@@ -134,6 +134,12 @@ export default function Complete({ form, saveError, circleCode, circleName, onRe
           className="w-full font-body font-semibold text-[14px] rounded-2xl py-3.5 border border-border text-ink"
         >
           Start another search
+        </button>
+        <button
+          onClick={onVision}
+          className="w-full text-center font-body text-[11.5px] text-sage/70 pt-1"
+        >
+          See what Scout is becoming →
         </button>
       </div>
     </div>

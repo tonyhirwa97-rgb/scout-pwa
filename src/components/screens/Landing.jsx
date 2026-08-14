@@ -13,7 +13,7 @@ const item = {
   show: { opacity: 1, y: 0, transition: { duration: 0.4, ease: "easeOut" } },
 };
 
-export default function Landing({ onStart, onInsights, onCreateCircle }) {
+export default function Landing({ onStart, onInsights, onCreateCircle, onVision }) {
   return (
     <div className="h-full flex flex-col px-6 pt-6 pb-7 relative overflow-hidden">
       <motion.div
@@ -77,6 +77,12 @@ export default function Landing({ onStart, onInsights, onCreateCircle }) {
           className="w-full text-center font-body text-[12px] text-forest/80 mt-4 underline underline-offset-2"
         >
           Shopping with a group? Create a Scout Circle instead
+        </button>
+        <button
+          onClick={onVision}
+          className="w-full text-center font-body text-[11.5px] text-sage/70 mt-3"
+        >
+          See what Scout is becoming →
         </button>
       </motion.div>
     </div>
