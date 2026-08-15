@@ -1,8 +1,9 @@
 import { motion } from "framer-motion";
-import { Check, Sparkles } from "lucide-react";
+import { Check, Sparkles, Calendar } from "lucide-react";
 import ScoutBadge from "../ScoutBadge";
 import PrimaryButton from "../PrimaryButton";
 import CircleSummary from "../CircleSummary";
+import { LAUNCH_DATE_LABEL } from "../../lib/constants";
 
 const container = { hidden: {}, show: { transition: { staggerChildren: 0.08, delayChildren: 0.1 } } };
 const item = { hidden: { opacity: 0, y: 12 }, show: { opacity: 1, y: 0, transition: { duration: 0.35 } } };
@@ -50,6 +51,13 @@ export default function CircleLanding({ circle, onJoin }) {
               <span className="font-body text-[12.5px] font-semibold text-cream">{t}</span>
             </div>
           ))}
+        </motion.div>
+
+        <motion.div variants={item} className="flex items-center gap-1.5 rounded-full bg-marigold/12 border border-marigold/30 pl-2 pr-3 py-1.5 w-fit mb-5">
+          <Calendar className="w-3.5 h-3.5 text-marigold" />
+          <span className="font-body text-[11.5px] font-medium text-ink">
+            Real ordering begins <span className="font-semibold">{LAUNCH_DATE_LABEL}</span>
+          </span>
         </motion.div>
 
         <motion.div variants={item} className="mb-2">

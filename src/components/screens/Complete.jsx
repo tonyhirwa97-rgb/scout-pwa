@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { MessageCircle, Sparkles, Copy, Check as CheckIcon } from "lucide-react";
 import ScoutBadge from "../ScoutBadge";
 import ConfettiBurst from "../ConfettiBurst";
-import { CATEGORIES } from "../../lib/constants";
+import { CATEGORIES, LAUNCH_DATE_LABEL } from "../../lib/constants";
 import { getWhatsAppLink, circleShareUrl } from "../../lib/backend";
 import { playSuccess } from "../../lib/sound";
 
@@ -48,7 +48,7 @@ export default function Complete({ form, saveError, circleCode, circleName, onRe
         <p className="font-mono text-[11px] tracking-wider text-marigold uppercase mb-2">Interest logged</p>
         <h2 className="font-display text-[26px] leading-tight text-ink mb-2">You're on the list.</h2>
         <p className="font-body text-[13.5px] text-sage mb-6 leading-snug">
-          You're among the first people helping us build a smarter way to shop. We'll follow up as soon as Scout is ready to start finding things for people.
+          You're among the first people helping us build a smarter way to shop. Real ordering begins {LAUNCH_DATE_LABEL} — we'll reach out to you then.
         </p>
 
         <motion.div

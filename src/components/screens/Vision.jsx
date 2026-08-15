@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { ArrowLeft, Search, Shirt, Home, Sparkles } from "lucide-react";
 import ScoutBadge from "../ScoutBadge";
 import { playBack } from "../../lib/sound";
+import { LAUNCH_DATE_LABEL } from "../../lib/constants";
 
 const container = { hidden: {}, show: { transition: { staggerChildren: 0.1, delayChildren: 0.15 } } };
 const item = { hidden: { opacity: 0, y: 14 }, show: { opacity: 1, y: 0, transition: { duration: 0.4, ease: "easeOut" } } };
@@ -42,11 +43,11 @@ export default function Vision({ onBack }) {
           Scout today is the beginning.
         </motion.h1>
 
-        <motion.p variants={item} className="font-body text-[13.5px] leading-relaxed text-sage mb-7 max-w-[310px]">
+        <motion.p variants={item} className="font-body text-[13.5px] leading-relaxed text-sage mb-3 max-w-[310px]">
           Right now, Scout helps you request what you need and bring your
-          people in. Everything below is where we're headed next — not
-          something you can do today, but what your interest is helping
-          us build toward.
+          people in. Real ordering begins {LAUNCH_DATE_LABEL} — everything
+          below is what comes after that, not something you can do today,
+          but what your interest is helping us build toward.
         </motion.p>
 
         <div className="flex flex-col gap-3">

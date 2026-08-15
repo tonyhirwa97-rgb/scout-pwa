@@ -24,6 +24,12 @@ export const CATEGORIES = [
 
 export const TOTAL_STEPS = 2;
 
+// Real, specific launch date - per the charter, real numbers/dates
+// build trust far better than vague "soon" language. Update this in
+// one place if the date ever changes.
+export const LAUNCH_DATE_ISO = "2026-10-10";
+export const LAUNCH_DATE_LABEL = "October 10, 2026";
+
 export const emptyForm = {
   categories: [],
   want: "",
