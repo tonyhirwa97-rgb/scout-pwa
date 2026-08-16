@@ -10,6 +10,7 @@ import CircleLanding from "./components/screens/CircleLanding";
 import CreateCircle from "./components/screens/CreateCircle";
 import CircleCreated from "./components/screens/CircleCreated";
 import Vision from "./components/screens/Vision";
+import ChatWidget from "./components/ChatWidget";
 
 const Insights = lazy(() => import("./components/screens/Insights"));
 
@@ -197,6 +198,8 @@ export default function App() {
             </Suspense>
           )}
         </AnimatePresence>
+
+        {screen !== "insights" && <ChatWidget />}
       </div>
     </div>
   );

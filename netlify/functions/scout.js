@@ -220,6 +220,64 @@ async function handleGetCircle(sheets, params) {
   };
 }
 
+function formatZambianPhone(raw) {
+  let phone = (raw || "").toString().trim().replace(/[\s-]/g, "");
+  if (!phone) return null;
+  if (phone.startsWith("+")) return phone;
+  if (phone.startsWith("260")) return `+${phone}`;
+  if (phone.startsWith("0")) return `+260${phone.slice(1)}`;
+  return `+260${phone}`;
+}
+
+async function sendSms(to, message) {
+  const username = process.env.AT_USERNAME;
+  const apiKey = process.env.AT_API_KEY;
+  if (!username || !apiKey || !to) return; // Optional — skip silently if not configured
+
+  const senderId = process.env.AT_SENDER_ID; // optional - omit to use the shared default
+
+  const params = new URLSearchParams({
+    username,
+    to,
+    message,
+  });
+  if (senderId) params.append("from", senderId);
+
+  try {
+    await fetch("https://api.africastalking.com/version1/messaging", {
+      method: "POST",
+      headers: {
+        apiKey,
+        "Content-Type": "application/x-www-form-urlencoded",
+        Accept: "application/json",
+      },
+      body: params.toString(),
+    });
+  } catch {
+    // Don't let a failed SMS break the submission
+  }
+}
+
+async function sendSubmissionSms(body) {
+  const registrantPhone = formatZambianPhone(body.phone);
+  const founderPhone = formatZambianPhone(process.env.FOUNDER_PHONE);
+  const categories = (body.categories || []).join(", ") || "your request";
+
+  if (registrantPhone) {
+    await sendSms(
+      registrantPhone,
+      `Hi ${body.name || "there"}! Scout received your request for ${categories}. Real ordering begins Oct 10, 2026 - we'll reach out then. Thanks for being an early supporter! - Team Scout`
+    );
+  }
+
+  if (founderPhone) {
+    await sendSms(
+      founderPhone,
+      `New Scout request: ${categories} from ${body.name || "—"} (${body.phone || "—"})${body.circleCode ? ` [Circle: ${body.circleCode}]` : ""}`
+    );
+  }
+}
+
 async function sendNotificationEmail(body) {
   const apiKey = process.env.RESEND_API_KEY;
   const to = process.env.NOTIFY_EMAIL;
@@ -285,6 +343,7 @@ export const handler = async (event) => {
           body.circleCode || "",
         ]);
         await sendNotificationEmail(body);
+        await sendSubmissionSms(body);
       }
 
       return json(200, { ok: true });
